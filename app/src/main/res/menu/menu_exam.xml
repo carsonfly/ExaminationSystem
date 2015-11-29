@@ -1,0 +1,13 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.oms.examinationsystem.activity.ExamActivity">
+
+    <item android:id="@+id/handin" android:title="@string/handin"
+        android:orderInCategory="100"  />
+    <item android:id="@+id/refresh" android:title="刷新"
+        android:orderInCategory="100"  />
+    <item android:id="@+id/model" android:title="夜间模式"
+        android:orderInCategory="99"  />
+
+</menu>

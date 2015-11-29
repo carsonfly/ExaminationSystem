@@ -1,0 +1,15 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity"
+   >
+    <item android:id="@+id/changeQuestionLib" android:title="@string/changeQuestionLib"
+        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/myQuestionLib" android:title="我的题库"
+        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/changeQuestionNumber" android:title="@string/changeQuestionNumber"
+        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/update" android:title="版本信息"
+        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/about" android:title="关于"
+        android:orderInCategory="100" app:showAsAction="never" />
+</menu>

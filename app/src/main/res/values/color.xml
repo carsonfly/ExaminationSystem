@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="dayBackgroud">#ffffff</color>
+    <color name="dayForeground">#000000</color>
+    <color name="nightBackground">#000000</color>
+    <color name="nightForeground">#999999</color>
+</resources>

@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">调控培训系统</string>
+    <string name="title">调控培训系统</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="changeQuestionLib">切换题库</string>
+    <string name="changeQuestionNumber">设置题量</string>
+    <string name="setting">设置</string>
+    <string name="handin">交卷</string>
+    <string name="title_activity_exam">调控培训系统</string>
+    <string name="setting_about_description">By 国网天府供电公司调控中心双流分中心QC小组</string>
+    <string name="VerbInformation">"1.修改了大量Bug\n"
+                                        "2.加入夜间模式\n"
+                                        "3.修改了主界面背景"</string>
+    <string name="about">"电力考试培训系统Ver 1.1\n"
+                            "By国网天府供电公司调控中心双流调控分中心QC小组\n"</string>
+</resources>
