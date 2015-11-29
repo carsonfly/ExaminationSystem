@@ -45,6 +45,7 @@ public class ExamActivity extends Activity {
     private static Button next ;
     private static Button previous ;
     private static Button turnToPage;
+    private static boolean isNightMode=false;
     public ExamActivity() {
 
     }
@@ -82,7 +83,7 @@ public class ExamActivity extends Activity {
         editAnswer = (EditText) findViewById(R.id.editText);
         questions = lib.getQuestions();
         // Log.i("questions", String.valueOf(questions.size()));
-        initQuestionView(index);
+
         next = (Button) findViewById(R.id.nextQuestion);
        previous = (Button) findViewById(R.id.previousQuestion);
         turnToPage=(Button)findViewById(R.id.turnToPage);
@@ -146,15 +147,8 @@ public class ExamActivity extends Activity {
             }
         });
 
-//        if (savedInstanceState!=null){
-//            Log.i("onCreate",savedInstanceState.toString());
-//            index=(int)savedInstanceState.get("index");
-//            questions=(ArrayList<Question>)savedInstanceState.get("questions");
-//            answers=(HashMap<Integer,Answer>)savedInstanceState.get("answers");
-//            checkBoxes=(ArrayList<CheckBox>)savedInstanceState.get("checkBoxes");
-//            radioButtons=(ArrayList<RadioButton>)savedInstanceState.get("radioButtons");
-//            hasHandin=(Boolean)savedInstanceState.get("hasHandin");
-//        }
+
+        initQuestionView(index);
          }
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -248,6 +242,7 @@ public class ExamActivity extends Activity {
 
     public void initQuestionView(Integer id) {
         Question question=new Question();
+
         textView.setText("题库中没有该类型题目");
         textAnswer.setVisibility(View.GONE);
         editAnswer.setVisibility(View.GONE);
@@ -263,8 +258,6 @@ public class ExamActivity extends Activity {
         if (answers.containsKey(id)) {
             answer = answers.get(id);
         }
-        if (question != null)
-            Log.i("question", question.toString());
 
 
         if (question != null&&question.getType()!=null&&(question.getType().equals("单选题") || question.getType().equals("判断题"))) {
@@ -273,7 +266,7 @@ public class ExamActivity extends Activity {
             textView.setText(index+1+"."+question.getSterm().get(0));
             textAnswer.setVisibility(View.GONE);
             HashMap<String, Boolean> choices = question.getChoices();
-            int size = choices.size();
+
             Iterator<String> iterator = choices.keySet().iterator();
 
             for (int i = 0; i < 8; i++) {
@@ -364,6 +357,7 @@ public class ExamActivity extends Activity {
                 textAnswer.setText(question.getAnswers().get(0));
                 textAnswer.setTextColor(Color.RED);
             }
+
         }else if (question != null&&question.getType()!=null&&question.getType().equals("填空题")){
             editAnswer.setVisibility(View.VISIBLE);
             textView.setText(index+1+"."+question.getSterm().get(0));
@@ -384,6 +378,9 @@ public class ExamActivity extends Activity {
                 textAnswer.setTextColor(Color.RED);
             }
         }
+        setNightMode(isNightMode);
+
+
 
 
     }
@@ -445,31 +442,55 @@ public class ExamActivity extends Activity {
             return true;
         }else if (id==R.id.refresh){
             hasHandin=false;
+            answers.clear();
+
         }else if (id== R.id.model&&item.getTitle().equals("夜间模式")){
+            isNightMode=true;
+            setNightMode(isNightMode);
+            item.setTitle("日间模式");
+        }else if (id== R.id.model&&item.getTitle().equals("日间模式")){
+
+            isNightMode=false;
+            setNightMode(isNightMode);
+            item.setTitle("夜间模式");
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+    private void setNightMode(boolean mode){
+        if (mode){
             layout.setBackgroundColor(Color.BLACK);
             textView.setTextColor(Color.WHITE);
             next.setTextColor(Color.WHITE);
             turnToPage.setTextColor(Color.WHITE);
             previous.setTextColor(Color.WHITE);
             for(CheckBox checkBox:checkBoxes)
+            {
+                if (checkBox.getCurrentTextColor()!=Color.RED)
                 checkBox.setTextColor(Color.WHITE);
-            for(RadioButton radioButton:radioButtons)
+            }
+
+            for(RadioButton radioButton:radioButtons){
+                if (radioButton.getCurrentTextColor()!=Color.RED)
                 radioButton.setTextColor(Color.WHITE);
-            item.setTitle("日间模式");
-        }else if (id== R.id.model&&item.getTitle().equals("日间模式")){
+            }
+
+        }else {
             layout.setBackgroundColor(Color.WHITE);
             textView.setTextColor(Color.BLACK);
             next.setTextColor(Color.BLACK);
             turnToPage.setTextColor(Color.BLACK);
             previous.setTextColor(Color.BLACK);
-            for(CheckBox checkBox:checkBoxes)
-                checkBox.setTextColor(Color.BLACK);
-            for(RadioButton radioButton:radioButtons)
+            for(CheckBox checkBox:checkBoxes){
+                if (checkBox.getCurrentTextColor()!=Color.RED)
+                    checkBox.setTextColor(Color.BLACK);
+            }
+
+            for(RadioButton radioButton:radioButtons){
+                if (radioButton.getCurrentTextColor()!=Color.RED)
                 radioButton.setTextColor(Color.BLACK);
+            }
 
-            item.setTitle("夜间模式");
         }
-
-        return super.onOptionsItemSelected(item);
     }
 }

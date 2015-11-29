@@ -117,16 +117,7 @@
             android:layout_column="8"
             android:textColor="#ffff00" />
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:text="查看题库"
-            android:textSize="30dp"
-            android:background="#00000000"
-            android:id="@+id/showAllQuestions"
-            android:textColor="#ffff00"
-            android:layout_row="6"
-            android:layout_column="10" />
+
     </LinearLayout>
     </ScrollView>
 </FrameLayout>

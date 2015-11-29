@@ -73,13 +73,15 @@ public class MainActivity extends Activity {
             data=questionIO.readFile(getResources().openRawResource(R.raw.lib));
            fileIO.Save("QuestionLibData",data,getApplicationContext());
        }
-        questions=getQuestions();
+        for(int i=0;i<5;i++)
+            questionNumber.add(getQuestions(questionLibType,data,libCode).size());
+        questions=getQuestions(questionLibType,data,libCode);
         setContentView(R.layout.activity_main);
 
         Log.i("state", "onCreate");
         quesionLibView = (TextView) findViewById(R.id.quesionLib);
         quesionLibView.setText("题库:线路安规");
-        final Button buttonShowAllQuestions = (Button) findViewById(R.id.showAllQuestions);
+
         final Button panduanti = (Button) findViewById(R.id.panduanti);
         final Button danxuanti = (Button) findViewById(R.id.danxuanti);
         final Button duoxuanti = (Button) findViewById(R.id.duoxuanti);
@@ -88,18 +90,10 @@ public class MainActivity extends Activity {
         final Button sortBySterm = (Button) findViewById(R.id.sorBySterm);
         final Button tiankongti = (Button) findViewById(R.id.tiankongti);
 
-        this.getOverflowMenu();
-        questionNumber=new ArrayList<Integer>();
-        for(int i=0;i<5;i++)
-            questionNumber.add(getQuestions().size());
-        buttonShowAllQuestions.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Collections.sort(questions,new SortByType());
-                startExamActivity(questions, null, "all");
 
-            }
-        });
+        questionNumber=new ArrayList<Integer>();
+
+
         panduanti.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -222,6 +216,7 @@ public class MainActivity extends Activity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.changeQuestionLib) {
+
             new AlertDialog.Builder(MainActivity.this)
                     .setTitle("请选择")
                     .setIcon(android.R.drawable.ic_dialog_info)
@@ -240,19 +235,20 @@ public class MainActivity extends Activity {
                                                                 case 0:
                                                                     quesionLibView.setText("题库:线路安规");
                                                                     libCode = 0;
-                                                                    questions=getQuestions();
+
                                                                     break;
                                                                 case 1:
                                                                     quesionLibView.setText("题库:变电安规");
                                                                     libCode = 1;
-                                                                    questions=getQuestions();
+
                                                                     break;
                                                                 case 2:
                                                                     quesionLibView.setText("题库:配电安规");
                                                                     libCode = 2;
-                                                                    questions=getQuestions();
+
                                                                     break;
                                                             }
+
                                                             dialog.dismiss();
                                                         }
                                                     })
@@ -261,12 +257,12 @@ public class MainActivity extends Activity {
                                         case 1:
                                             quesionLibView.setText("题库:调度自动化技师考题");
                                             libCode = 3;
-                                            questions=getQuestions();
+
                                             break;
                                         case 2:
                                             quesionLibView.setText("题库:双千人才题库");
                                             libCode = 4;
-                                            questions=getQuestions();
+
                                             break;
                                         case 3:
                                             new AlertDialog.Builder(MainActivity.this)
@@ -278,17 +274,17 @@ public class MainActivity extends Activity {
                                                                         case 0:
                                                                             quesionLibView.setText("题库:线路安规");
                                                                             libCode = 5;
-                                                                            questions=getQuestions();
+
                                                                             break;
                                                                         case 1:
                                                                             quesionLibView.setText("题库:变电安规");
                                                                             libCode = 6;
-                                                                            questions=getQuestions();
+
                                                                             break;
                                                                         case 2:
                                                                             quesionLibView.setText("题库:配电安规");
                                                                             libCode = 7;
-                                                                            questions=getQuestions();
+
                                                                             break;
                                                                     }
                                                                     dialog.dismiss();
@@ -304,6 +300,8 @@ public class MainActivity extends Activity {
                     )
                     .setNegativeButton("取消", null)
                     .show();
+            questionLibType=0;
+            questions=getQuestions(questionLibType,data,libCode);
             return true;
         } else if (id == R.id.changeQuestionNumber) {
             final EditText editText = new EditText(this);
@@ -330,7 +328,7 @@ public class MainActivity extends Activity {
 
                                 questionNumber.clear();
                                 for(int i=0;i<5;i++)
-                                    questionNumber.add(getQuestions().size());
+                                    questionNumber.add(getQuestions(questionLibType,data,libCode).size());
                             }
                         }
                     })
@@ -348,21 +346,24 @@ public class MainActivity extends Activity {
                     .setPositiveButton("确定", null).show();
         }else if (id==R.id.myQuestionLib){
             if(mydata!=null){
-                ArrayList<String> titles=new ArrayList<>();
+                questionLibType=1;
+                final ArrayList<String> titles=new ArrayList<>();
                 final ArrayList<Integer> code=new ArrayList<>();
                 for(QuestionLib lib:mydata.getQuestionLibs()){
                     Log.i("QuestionLib",mydata.getQuestionLibs().toString());
                     titles.add(lib.getName());
                     code.add(lib.getLibCode());
                 }
+
                 String[] titleStrings=new String[titles.size()];
                 new AlertDialog.Builder(MainActivity.this)
                         .setTitle("请选择")
                         .setIcon(android.R.drawable.ic_dialog_info)
                         .setSingleChoiceItems(titles.toArray(titleStrings), 0, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
+                                quesionLibView.setText(titles.get(which));
                                 libCode = code.get(which);
-                                questions = getQuestions();
+                                questions=getQuestions(questionLibType,mydata,libCode);
                                 dialog.dismiss();
                             }
                         })
@@ -378,11 +379,19 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    public ArrayList<Question> getQuestions() {
+    public ArrayList<Question> getQuestions(int questionLibType,QuestionData data,int libCode) {
+
+        ArrayList<Question> questions=null;
+        switch (questionLibType){
+            case 0:
+                questions=questionIO.readQuestionData(data, libCode);
+                break;
+            case 1:
+                questions=questionIO.readQuestionData(mydata,libCode);
+        }
 
 
 
-        ArrayList<Question> questions=questionIO.readQuestionData(data, libCode);
 
         Log.i("QuestionLibs",data.getQuestionLibs().toString());
         return questions;
